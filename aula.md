@@ -13,3 +13,7 @@ yarn add typescript @types/react @types/node -D
 *-- install sass --*
 
 yarn add sass
+
+*-- install date Fns _ Formt date --*
+
+yarn add date-fns
