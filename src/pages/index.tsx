@@ -1,5 +1,6 @@
+import { Header } from '../Header/index';
 export default function Home() {
   return (
-    <div>oi</div>
+    <h1>Index</h1>
   )
 }
