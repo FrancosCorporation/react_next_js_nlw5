@@ -1,34 +1,71 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# react_next_js_nlw5
 
-## Getting Started
+**Projeto de estudo** — primeiros passos com Next.js + TypeScript e Sass, praticados como continuação dos aprendizados da Next Level Week 5 da Rocketseat, em junho de 2021.
 
-First, run the development server:
+![TypeScript](https://img.shields.io/badge/TypeScript-4-3178C6?style=flat&logo=typescript&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-11-black?style=flat&logo=next.js)
+![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-green)
+![Status](https://img.shields.io/badge/status-projeto%20de%20estudo-blue)
+
+## Sobre
+
+Exercício de estruturação de um app Next.js (Pages Router) no formato de um player de podcast: layout global com cabeçalho e player, CSS Modules com Sass e formatação de data em português. O projeto está **incompleto** — é um recorte de estudo com a casca do player e a página inicial ainda em `"Index"`.
+
+## Funcionalidades
+
+Comprovadas pelo código:
+
+- Cabeçalho com logo, texto fixo e data atual formatada em pt-BR via `date-fns` (`src/Header/index.tsx`);
+- Layout global que envolve as páginas e mantém o player fixo (`src/pages/_app.tsx`);
+- Componente `Player` com estilos em SCSS Modules (casca, sem controles implementados) (`src/Player/index.tsx`);
+- Documento customizado do Next (`src/pages/_document.tsx`) e estilos globais em Sass.
+- Assets SVG de controles de mídia em `public/` (play, pause, shuffle, repeat, etc.).
+
+## Stack
+
+- **Next.js 11** (Pages Router, `next dev`/`next build`/`next start`/`next lint`)
+- **React 17** + **TypeScript 4**
+- **Sass** (`sass`) com CSS Modules
+- **date-fns** com locale `pt-BR`
+- **ESLint** (`eslint-config-next`)
+
+## Como rodar
 
 ```bash
-npm run dev
-# or
+yarn install
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre em `http://localhost:3000`. Outros scripts:
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```bash
+yarn build   # build de produção
+yarn start   # serve o build
+yarn lint    # next lint
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## Estrutura do projeto
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```
+.
+├── public/                  # SVGs de controle e ícones
+├── src/
+│   ├── Header/              # cabeçalho com data em pt-BR
+│   ├── Player/              # casca do player + styles.module.scss
+│   ├── pages/
+│   │   ├── _app.tsx         # layout global
+│   │   ├── _document.tsx
+│   │   └── index.tsx        # página inicial (placeholder)
+│   └── styles/              # global.scss e wrapper
+├── aula.md                  # anotações de aula
+└── package.json
+```
 
-## Learn More
+## Observações
 
-To learn more about Next.js, take a look at the following resources:
+- `aula.md` registra os comandos usados na aula (create-next-app, TypeScript, Sass, date-fns).
+- O arquivo `server json.txt` aparece como deletado no working tree antes deste trabalho — a alteração não foi feita por este README e não foi revertida.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Licença
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+MIT — veja [LICENSE](LICENSE).
