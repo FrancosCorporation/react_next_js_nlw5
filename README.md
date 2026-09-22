@@ -1,5 +1,23 @@
 # react_next_js_nlw5
 
+## 🐳 Instalação e Execução (Docker) — recomendado
+
+### Pré-requisitos
+- [Docker](https://docs.docker.com/get-docker/) + Docker Compose
+
+### Rodar com Docker
+```bash
+docker compose up --build
+```
+
+
+### Sem Docker (local)
+```bash
+npm install
+npm start
+```
+
+
 **Projeto de estudo** — primeiros passos com Next.js + TypeScript e Sass, praticados como continuação dos aprendizados da Next Level Week 5 da Rocketseat, em junho de 2021.
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-4-3178C6?style=flat&logo=typescript&logoColor=white)
