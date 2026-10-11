@@ -10,6 +10,7 @@
 - `npm audit` completo reporta 5 alertas altos no caminho de desenvolvimento `eslint-config-next → @next/eslint-plugin-next → fast-glob → micromatch → braces`; o registry não oferece versão corrigida compatível. `npm audit fix --force` propõe rebaixar `eslint-config-next` para 14.2.35, então não foi aplicado. Auditoria sem `devDependencies` retorna zero vulnerabilidades.
 - Nenhum teste foi adicionado ou executado. `TEST-01` permanece pendente; o CI não inclui testes.
 - O workflow foi publicado em `d4666969ace30d644236db427b644648e380f4df`; a execução remota terminou com sucesso. TEST-01 segue fora do workflow até haver testes automatizados.
+- **DEVOPS-04 em andamento:** workflow atualizado para actions v7 com runtime Node 24 e runner `ubuntu-24.04`; aguarda CI remota.
 - A imagem Docker foi construída e inspecionada: usuário `nextjs`, healthcheck presente e sentinela `.env` ausente. Nenhum container foi iniciado.
 
 ## 0. Como usar este documento
@@ -56,6 +57,7 @@
 | [P2] | TEST-01 | Nenhum teste e nenhum script `test` | Médio |
 | [P2] | DEVOPS-02 | Sem CI (`.github/` ausente) | Baixo |
 | [P2] | DEVOPS-03 | Build em `node:16-alpine` (EOL) vs runtime `node:20-alpine`; imagem final com devDeps e fonte | Médio |
+| [P2] | DEVOPS-04 | Actions em runtime Node 20 e runner `ubuntu-latest` sujeito à migração de imagem | Baixo |
 | [P2] | DOC-01 | README: mistura yarn/npm, nota órfã e ausência de aviso EOL | Baixo |
 | [P2] | BUG-04 | `src/styles/global.scss` usa `vat()` em vez de `var()` | Baixo |
 | [P3] | BUG-03 | `src/pages/index.tsx` import não usado (`Header`) | Baixo |
@@ -220,6 +222,14 @@ docker build -t nlw5-devops3 . >/dev/null
 docker run --rm --entrypoint sh nlw5-devops3 -c 'node -v; ls /app'
 ```
 
+### DEVOPS-04 — Atualizar runtime das actions e fixar runner [P2]
+
+- **Arquivo:** `.github/workflows/ci.yml`
+- **Evidência:** workflow usava `actions/checkout@v4`, `actions/setup-node@v4` e `runs-on: ubuntu-latest`. As actions foram atualizadas para `v7`, cujos metadados declaram `using: node24`, e o runner foi fixado em `ubuntu-24.04` para evitar migração automática de imagem.
+- **Mudança:** executada; CI pós-alteração pendente.
+- **Aceite:** lint, typecheck, build, auditoria de produção e imagem Docker passam no runner/action atualizados. O workflow não executa testes enquanto TEST-01 estiver pendente.
+- **Verificação:** parser YAML e CI remota após a mudança.
+
 ### IMP-01 — Upgrade do Next 11 → 14/15 como estratégia única de remendo de plataforma [P3]
 
 - **Arquivo:** `/home/servidor/Git/react_next_js_nlw5/package.json` (linha 13: `"next": "11.0.0"`; linha 14: `"react": "17.0.2"`) e `/home/servidor/Git/react_next_js_nlw5/src/pages/`
@@ -284,6 +294,7 @@ grep -n 'incompleto\|Node.js 20.19' README.md | head -3
 - [x] DEVOPS-01: instalação usa `npm ci` e `package-lock.json`, sem fallback.
 - [x] DEVOPS-02: workflow de lint, tipos, build, auditoria de produção e Docker publicado; execução `d4666969ace30d644236db427b644648e380f4df` verde.
 - [x] DEVOPS-03: as stages usam Node 24; build standalone construído, usuário `nextjs`, healthcheck e diretórios de desenvolvimento excluídos.
+- [ ] DEVOPS-04: actions v7/Node 24 e runner Ubuntu 24.04; aguarda CI remota.
 - [x] DOC-01: README usa um único gerenciador, sem referências órfãs e explica que o exercício está incompleto.
 - [x] IMP-01: build e lint verdes com Next 16.4; Pages Router mantido e rotas estáticas geradas.
 - [ ] Revalidação do contrato: `python3 /tmp/validate.py react_next_js_nlw5` retorna `OK`.
