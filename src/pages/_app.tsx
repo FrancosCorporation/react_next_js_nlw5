@@ -1,9 +1,10 @@
+import type { AppProps } from 'next/app'
 import { Header } from '../Header'
 import '../styles/global.scss'
 import styles from '../styles/app.module.scss'
-import { Player } from '../Player/index';
+import { Player } from '../Player'
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div className={styles.wrapper}>
       <main>
@@ -13,8 +14,6 @@ function MyApp({ Component, pageProps }) {
       <Player />
     </div>
   )
-
-
 }
 
 export default MyApp

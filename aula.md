@@ -14,6 +14,6 @@ yarn add typescript @types/react @types/node -D
 
 yarn add sass
 
-*-- install date Fns _ Formt date --*
+*-- install date-fns _ format date --*
 
 yarn add date-fns
