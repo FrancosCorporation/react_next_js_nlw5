@@ -9,7 +9,7 @@
 - `npm ci`, `npm run lint`, `npm run typecheck`, `npm run build`, auditoria de produção e `git diff --check` passaram.
 - `npm audit` completo reporta 5 alertas altos no caminho de desenvolvimento `eslint-config-next → @next/eslint-plugin-next → fast-glob → micromatch → braces`; o registry não oferece versão corrigida compatível. `npm audit fix --force` propõe rebaixar `eslint-config-next` para 14.2.35, então não foi aplicado. Auditoria sem `devDependencies` retorna zero vulnerabilidades.
 - Nenhum teste foi adicionado ou executado. `TEST-01` permanece pendente; o CI não inclui testes.
-- O workflow foi criado localmente. A credencial GitHub disponível já recusou workflows em projetos anteriores por falta do escopo OAuth `workflow`; o push será tentado após o commit de implementação.
+- O workflow foi publicado em `d4666969ace30d644236db427b644648e380f4df`; a execução remota terminou com sucesso. TEST-01 segue fora do workflow até haver testes automatizados.
 - A imagem Docker foi construída e inspecionada: usuário `nextjs`, healthcheck presente e sentinela `.env` ausente. Nenhum container foi iniciado.
 
 ## 0. Como usar este documento
@@ -33,7 +33,7 @@
 - Assets íntegros: `public/logo.svg` (usado por `src/Header/index.tsx` linha 10) e todos os SVGs do player existem em `public/`.
 - Working tree limpo (`git status --porcelain` vazio) na branch `main`.
 
-**O que está quebrado (verificado):**
+**Defeitos identificados na análise inicial:**
 
 - `next` preso em `11.0.0` (`package.json` linha 13) — versão EOL, sem patches de segurança; `npm audit` **não roda** no repo (falhou com `ENOLOCK`: só existe `yarn.lock`, e `yarn` não está instalado no ambiente).
 - `README.md` manda rodar `docker compose up --build` (linha 10), mas **não existe** `docker-compose.yml`/`compose.yaml` nem `.yml` algum na raiz — comando inexecutável.
@@ -189,13 +189,13 @@ grep -n '2>/dev/null\|legacy-peer-deps' Dockerfile && echo "ainda tem fallback" 
 docker build -t nlw5-devops1 . >/dev/null && echo "build reprodutivel OK"
 ```
 
-### DEVOPS-02 — Sem pipeline de CI (diretório `.github/` ausente) [P2]
+### DEVOPS-02 — Pipeline de CI (ausente na análise inicial) [P2]
 
-- **Arquivo:** `/home/servidor/Git/react_next_js_nlw5/` (inexistência de `/home/servidor/Git/react_next_js_nlw5/.github`)
-- **Evidência:** `ls -la .github` → "no .github"; não há nenhum workflow/CI (GitHub Actions, GitLab CI, Circle etc.) em todo o repositório. Os scripts necessários já existem no `package.json` (`lint`, `build`) mas não são executados automaticamente — a branch ativa é `main`.
-- **Impacto:** lint e build só rodam quando alguém lembra; como não há testes (TEST-01), uma regressão pode chegar à `main` sem nenhuma checagem automática.
-- **Mudança:** criar `.github/workflows/ci.yml` para `push`/`pull_request`, com Node 24, `npm ci`, lint, typecheck, build, auditoria de produção e build Docker. Acrescentar testes apenas quando TEST-01 puder ser implementado.
-- **Aceite:** workflow existe e fica verde num push à `main`; falhas de lint/build bloqueiam o PR.
+- **Arquivo:** `.github/workflows/ci.yml`
+- **Evidência inicial:** a análise de 2026-10-05 não encontrou workflow; desde então foi criado e publicado o CI para a branch `main`.
+- **Impacto atual:** a CI checa lint, tipos, build, dependências de produção e Docker; regressões de comportamento sem teste automatizado ainda podem chegar à `main`.
+- **Mudança implementada:** workflow roda em `push`/`pull_request`, com Node 24, `npm ci`, lint, typecheck, build, auditoria de produção e build Docker. Acrescentar testes quando TEST-01 for implementado.
+- **Aceite atual:** execução `d4666969ace30d644236db427b644648e380f4df` passou; integração de testes permanece pendente com TEST-01.
 - **Verificação:**
 
 ```bash
@@ -257,8 +257,8 @@ grep -n 'incompleto\|Node.js 20.19' README.md | head -3
 
 - **Wave 0 — comandos e segurança local:** BUG-01, BUG-02, DOC-01 e SEC-02.
 - **Wave 1 — reprodutibilidade:** DEVOPS-01, DEVOPS-03, BUG-03 e BUG-04.
-- **Wave 2 — plataforma:** SEC-01 e IMP-01. TEST-01 continua pendente porque esta tarefa não permite rodar testes.
-- **Wave 3 — automação:** DEVOPS-02 roda lint, typecheck, build, auditoria de produção e build Docker em push/PR; a execução no GitHub depende do push do workflow.
+- **Wave 2 — plataforma:** SEC-01 e IMP-01. TEST-01 continua pendente; nenhum teste automatizado foi adicionado ou executado.
+- **Wave 3 — automação:** DEVOPS-02 roda lint, typecheck, build, auditoria de produção e build Docker em push/PR; workflow publicado e execução verde. Integrar testes depende de TEST-01.
 
 ## 9. Fora de escopo / riscos
 
@@ -282,7 +282,7 @@ grep -n 'incompleto\|Node.js 20.19' README.md | head -3
 - [x] BUG-04: função CSS corrigida; `npm run build` compilou o Sass.
 - [ ] TEST-01: script `test` existe e `npm test` passa, com ao menos os 2 testes de regressão definidos.
 - [x] DEVOPS-01: instalação usa `npm ci` e `package-lock.json`, sem fallback.
-- [ ] DEVOPS-02: workflow de lint, tipos, build, auditoria de produção e Docker existe; falta push e execução verde no GitHub.
+- [x] DEVOPS-02: workflow de lint, tipos, build, auditoria de produção e Docker publicado; execução `d4666969ace30d644236db427b644648e380f4df` verde.
 - [x] DEVOPS-03: as stages usam Node 24; build standalone construído, usuário `nextjs`, healthcheck e diretórios de desenvolvimento excluídos.
 - [x] DOC-01: README usa um único gerenciador, sem referências órfãs e explica que o exercício está incompleto.
 - [x] IMP-01: build e lint verdes com Next 16.4; Pages Router mantido e rotas estáticas geradas.
