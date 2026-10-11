@@ -10,7 +10,7 @@
 - `npm audit` completo reporta 5 alertas altos no caminho de desenvolvimento `eslint-config-next → @next/eslint-plugin-next → fast-glob → micromatch → braces`; o registry não oferece versão corrigida compatível. `npm audit fix --force` propõe rebaixar `eslint-config-next` para 14.2.35, então não foi aplicado. Auditoria sem `devDependencies` retorna zero vulnerabilidades.
 - Nenhum teste foi adicionado ou executado. `TEST-01` permanece pendente; o CI não inclui testes.
 - O workflow foi publicado em `d4666969ace30d644236db427b644648e380f4df`; a execução remota terminou com sucesso. TEST-01 segue fora do workflow até haver testes automatizados.
-- **DEVOPS-04 em andamento:** workflow atualizado para actions v7 com runtime Node 24 e runner `ubuntu-24.04`; aguarda CI remota.
+- **DEVOPS-04 concluído:** actions v7 com runtime Node 24 e runner `ubuntu-24.04`; CI remota `38185654531` passou.
 - A imagem Docker foi construída e inspecionada: usuário `nextjs`, healthcheck presente e sentinela `.env` ausente. Nenhum container foi iniciado.
 
 ## 0. Como usar este documento
@@ -226,7 +226,7 @@ docker run --rm --entrypoint sh nlw5-devops3 -c 'node -v; ls /app'
 
 - **Arquivo:** `.github/workflows/ci.yml`
 - **Evidência:** workflow usava `actions/checkout@v4`, `actions/setup-node@v4` e `runs-on: ubuntu-latest`. As actions foram atualizadas para `v7`, cujos metadados declaram `using: node24`, e o runner foi fixado em `ubuntu-24.04` para evitar migração automática de imagem.
-- **Mudança:** executada; CI pós-alteração pendente.
+- **Mudança:** executada; CI `38185654531` passou em lint, typecheck, build, auditoria de produção e Docker.
 - **Aceite:** lint, typecheck, build, auditoria de produção e imagem Docker passam no runner/action atualizados. O workflow não executa testes enquanto TEST-01 estiver pendente.
 - **Verificação:** parser YAML e CI remota após a mudança.
 
@@ -294,7 +294,7 @@ grep -n 'incompleto\|Node.js 20.19' README.md | head -3
 - [x] DEVOPS-01: instalação usa `npm ci` e `package-lock.json`, sem fallback.
 - [x] DEVOPS-02: workflow de lint, tipos, build, auditoria de produção e Docker publicado; execução `d4666969ace30d644236db427b644648e380f4df` verde.
 - [x] DEVOPS-03: as stages usam Node 24; build standalone construído, usuário `nextjs`, healthcheck e diretórios de desenvolvimento excluídos.
-- [ ] DEVOPS-04: actions v7/Node 24 e runner Ubuntu 24.04; aguarda CI remota.
+- [x] DEVOPS-04: actions v7/Node 24 e runner Ubuntu 24.04; CI `38185654531` verde.
 - [x] DOC-01: README usa um único gerenciador, sem referências órfãs e explica que o exercício está incompleto.
 - [x] IMP-01: build e lint verdes com Next 16.4; Pages Router mantido e rotas estáticas geradas.
 - [ ] Revalidação do contrato: `python3 /tmp/validate.py react_next_js_nlw5` retorna `OK`.
